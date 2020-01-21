@@ -7,12 +7,20 @@ gr-equalizers is intended to extend the equalizer functionality of gnuradio by t
 
 As you will notice, it is based heavily on the code of the gnuradio LMS and CMA decision directed equalizers
 
+## Installation
+```
+mkdir build
+cd build
+cmake ..
+make install
+```
+
 ## Modes of Operation
 
-The linear equalizer block operates in 3 states:
+The linear/decision-feedback equalizer blocks operate in 3 states:
 
-1. IDLE 
-    - Apply the current taps to the incoming signal
+1. IDLE
+    - Apply the current taps to the incoming signal with no updating to the current taps
 2. TRAINING
     - Adapt the filter according to a specified training sequence that lines up with a tag in the incoming stream
 3. DD
@@ -26,7 +34,7 @@ If no training sequence or no tag is specified, then the equalizer will operate 
 
 ## TODO
 
-[x] QA tests for the linear equalizer block
-[x] Add a decision feedback equalizer block
-[] Add custom initial weights
+- [x] QA tests for the linear equalizer block
+- [x] Add a decision feedback equalizer block
+- [ ] Add custom initial weights
 
