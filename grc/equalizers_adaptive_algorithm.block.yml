@@ -1,0 +1,57 @@
+id: variable_adaptive_algorithm
+label: Adaptive Algorithm
+category: '[Equalizers]'
+flags: [ show_id, python ]
+
+
+parameters:
+-   id: type
+    label: Algorithm Type
+    dtype: enum
+    options: [lms, nlms, rls, cma, zf]
+    option_labels: [LMS, NLMS, RLS, CMA, ZF]
+-   id: cons
+    label: Digital Constellation Object
+    dtype: raw
+    hide: 'part'
+-   id: step_size
+    label: Step Size
+    dtype: float
+    default: '.0001'
+    hide: 'none'
+-   id: modulus
+    label: Modulus
+    dtype: int
+    default: 2
+    hide: ${ ( 'none' if str(type) == "cma" else 'all') }
+-   id: ffactor
+    label: Forgetting Factor
+    dtype: float
+    default: .99
+    hide: ${ ( 'none' if str(type) == "rls" else 'all') }
+-   id: delta
+    label: Delta
+    dtype: float
+    default: 10.0
+    hide: ${ ( 'none' if str(type) == "rls" else 'all') }
+
+# value: ${equalizers.adaptive_algorithm_lms(num_taps, adapt_after_training, initial_taps, training_sequence, cons, step_size)}  
+# In gr-digital constellation.block.yml, constellation.value returns the derived class - pass the base class
+# value: ${ (equalizers.adaptive_algorithm_lms(cons.base(), step_size)) if str(type) == 'lms' else (equalizers.adaptive_algorithm_cma(cons.base(), step_size, modulus)) if str(type) == 'cma' else  (equalizers.adaptive_algorithm_rls(cons.base(), lambda, delta)) }  
+value: |- 
+    ${ (equalizers.adaptive_algorithm_lms(cons.base(), step_size))  }
+
+templates:
+    imports: import equalizers
+    var_make: |-
+        % if str(type) == "lms" or str(type) == "nlms":
+        self.${id} = ${id} = equalizers.adaptive_algorithm_${type}( ${cons}, ${step_size}).base()
+        % elif str(type) == "cma":
+        self.${id} = ${id} = equalizers.adaptive_algorithm_${type}( ${cons}, ${step_size}, ${modulus}).base()
+        % elif str(type) == "rls":
+        self.${id} = ${id} = equalizers.adaptive_algorithm_${type}( ${cons}, ${ffactor}, ${delta}).base()
+        % elif str(type) == "zf":
+        self.${id} = ${id} = equalizers.adaptive_algorithm_${type}( ${cons} ).base()
+        % endif
+
+file_format: 1

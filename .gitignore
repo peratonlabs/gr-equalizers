@@ -1,0 +1,9 @@
+build/
+rebuild.sh
+**/.vscode/
+**/core
+examples/*.py
+**/__pycache__/
+*.m~
+*.fc32
+examples/test_*

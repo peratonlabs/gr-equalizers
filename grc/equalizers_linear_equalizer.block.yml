@@ -1,0 +1,57 @@
+id: equalizers_linear_equalizer
+label: Linear Equalizer
+category: '[Equalizers]'
+flags: [ python ]
+
+parameters:
+-   id: num_taps
+    label: Num. Taps
+    dtype: int
+-   id: training_sequence
+    label: Training Sequence
+    dtype: complex_vector
+    default: '[ ]'
+    hide: 'part'
+-   id: training_start_tag
+    label: Training Start Tag
+    dtype: string
+    default: 'corr_est'
+    hide: 'part'
+-   id: adapt_after_training
+    label: Adapt After Training
+    dtype: bool
+    default: 'True'
+    hide: 'part'
+-   id: sps
+    label: Input Samples per Symbol
+    dtype: int
+-   id: alg
+    label: Adaptive Algorithm Object
+    dtype: raw
+    hide: 'part'
+
+inputs:
+-   domain: stream
+    dtype: complex
+
+outputs:
+-   domain: stream
+    dtype: complex
+-   label: taps
+    domain: stream
+    dtype: complex
+    vlen: ${num_taps}
+    optional: true
+-   label: state
+    domain: stream
+    dtype: short
+    optional: true
+
+
+templates:
+    imports: import equalizers
+    make: equalizers.linear_equalizer(${num_taps}, ${training_sequence},  ${adapt_after_training}, ${sps}, ${alg}, ${training_start_tag})
+
+
+
+file_format: 1
