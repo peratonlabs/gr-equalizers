@@ -90,7 +90,7 @@ include(GrVersion)
 
 include(GrPlatform) #define LIB_SUFFIX
 
-find_package(Armadillo)
+find_package(Armadillo REQUIRED)
 
 if(NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
